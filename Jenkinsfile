@@ -40,6 +40,7 @@ pipeline{
 		stage('Integration Test'){
 			steps{
 				echo"--------> These are Integration Test !! <----------"
+				echo":Empty test"
 			}
 		}
 		stage('Static Code Analysis'){
