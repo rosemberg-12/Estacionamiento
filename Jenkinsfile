@@ -47,9 +47,9 @@ pipeline{
 			steps{
 				echo"-------> This is Static Code Analysis !! <---------"
 				echo ":Under construction"
-				//withSonarQubeEnv('Sonar') {
-                //    sh "${tool name: 'SonarScanner', type: 'hudson.plugins.sonar.SonarRunnerInstallation'}/bin/sonar-scanner -Dproject.settings=sonar-project.properties"
-                //}
+				withSonarQubeEnv('Sonar') {
+                	sh "${tool name: 'SonarScanner', type: 'hudson.plugins.sonar.SonarRunnerInstallation'}/bin/sonar-scanner -Dproject.settings=sonar-project.properties"
+                }
 			}
 		}
 		stage('Build'){
