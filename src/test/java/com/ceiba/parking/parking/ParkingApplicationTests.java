@@ -12,6 +12,7 @@ public class ParkingApplicationTests {
 
 	@Test 
 	public void initTest(){
+		System.out.println("Executing test....");
 		Assert.assertTrue("This is a test, yei", true);
 	}
 

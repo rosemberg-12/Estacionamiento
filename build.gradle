@@ -22,7 +22,15 @@ sourceCompatibility = 1.8
 repositories {
 	mavenCentral()
 }
-
+	
+task forceTest { 
+	description 'Force always the tests'
+  	dependsOn "cleanTest", "test" 
+  	
+  	doLast{
+  	println 'Test executed'
+  	}
+} 
 
 dependencies {
 	compile('org.springframework.boot:spring-boot-starter-data-jpa')
