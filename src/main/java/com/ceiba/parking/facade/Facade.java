@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.ceiba.parking.controller.ParkingController;
+import com.ceiba.parking.domain.FilterVehicle;
 import com.ceiba.parking.domain.Vehicle;
 
 /**
@@ -18,8 +19,8 @@ public class Facade {
 	@Autowired
 	private ParkingController controller;
 	
-	public List<Vehicle> getAllVehicles(){
-		return controller.getAllVehicle();
+	public List<Vehicle> getVehicles(FilterVehicle filter){
+		return controller.getAllVehicle(filter);
 	}
 
 }
