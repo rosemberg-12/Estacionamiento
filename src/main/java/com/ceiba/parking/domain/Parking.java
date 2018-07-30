@@ -1,4 +1,4 @@
-package domain;
+package com.ceiba.parking.domain;
 
 public class Parking {
 	
