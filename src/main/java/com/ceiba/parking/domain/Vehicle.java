@@ -2,11 +2,6 @@ package com.ceiba.parking.domain;
 
 import java.util.Date;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-
 /**
  * Domain class used to represent a vehicle which is parked.
  * @author rosemberg.porras
