@@ -1,5 +1,10 @@
 package com.ceiba.parking.domain;
 
+/**
+ * Define all kind of vehicles in the system.
+ * @author rosemberg.porras
+ *
+ */
 public enum EVehicle {
 
 	CAR{

@@ -21,16 +21,18 @@ public class DBVehicle {
 	private String numberPlate;
 	private EVehicle kindOfVehicle;
 	private Date dateOfEntry;
+	private Integer cylinderCapacity;
 	
-	protected DBVehicle(){
+	public DBVehicle(){
 		
 	}
 	
-	public DBVehicle(String numberPlate, EVehicle kindOfVehicle, Date dateOfEntry) {
+	public DBVehicle(String numberPlate, EVehicle kindOfVehicle, Date dateOfEntry, Integer cylinderCapacity) {
 		super();
 		this.numberPlate = numberPlate;
 		this.kindOfVehicle = kindOfVehicle;
 		this.dateOfEntry = dateOfEntry;
+		this.cylinderCapacity=cylinderCapacity;
 	}
 	public String getNumberPlate() {
 		return numberPlate;
@@ -56,6 +58,11 @@ public class DBVehicle {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	
-	
+	public Integer getCylinderCapacity() {
+		return cylinderCapacity;
+	}
+	public void setCylinderCapacity(Integer cylinderCapacity) {
+		this.cylinderCapacity = cylinderCapacity;
+	}
+
 }
