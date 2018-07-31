@@ -7,5 +7,5 @@ package com.ceiba.parking.domain;
  */
 public enum FilterVehicle {
 
-	SEARCH_CAR, SEARCH_MOTOCYCLE, SEARCH_ALL;
+	SEARCH_CAR, SEARCH_MOTORCYCLE, SEARCH_ALL;
 }

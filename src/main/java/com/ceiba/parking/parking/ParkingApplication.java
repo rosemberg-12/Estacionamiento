@@ -1,6 +1,6 @@
 package com.ceiba.parking.parking;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import javax.sql.DataSource;
 
@@ -38,16 +38,16 @@ public class ParkingApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 		
-		 DBVehicle vehicle1= new DBVehicle("UEO930", EVehicle.CAR, new Date(), null);
-		 DBVehicle vehicle2= new DBVehicle("UEO931", EVehicle.CAR, new Date(), null);
-		 DBVehicle vehicle3= new DBVehicle("UEO932", EVehicle.CAR, new Date(), null);
-		 DBVehicle vehicle4= new DBVehicle("UEO933", EVehicle.CAR, new Date(), null);
-		 DBVehicle vehicle5= new DBVehicle("UEO934", EVehicle.CAR, new Date(), null);
+		 DBVehicle vehicle1= new DBVehicle("UEO930", EVehicle.CAR, LocalDateTime.now(), null);
+		 DBVehicle vehicle2= new DBVehicle("UEO931", EVehicle.CAR, LocalDateTime.now(), null);
+		 DBVehicle vehicle3= new DBVehicle("UEO932", EVehicle.CAR, LocalDateTime.now(), null);
+		 DBVehicle vehicle4= new DBVehicle("UEO933", EVehicle.CAR, LocalDateTime.now(), null);
+		 DBVehicle vehicle5= new DBVehicle("UEO934", EVehicle.CAR, LocalDateTime.now(), null);
 		 
-		 DBVehicle vehicle6= new DBVehicle("UEO93A", EVehicle.MOTOCYCLE, new Date(), 100);
-		 DBVehicle vehicle7= new DBVehicle("UEO93B", EVehicle.MOTOCYCLE, new Date(), 150);
-		 DBVehicle vehicle8= new DBVehicle("UEO93C", EVehicle.MOTOCYCLE, new Date(), 300);
-		 DBVehicle vehicle9= new DBVehicle("UEO93D", EVehicle.MOTOCYCLE, new Date(), 500);
+		 DBVehicle vehicle6= new DBVehicle("UEO93A", EVehicle.MOTORCYCLE, LocalDateTime.now(), 100);
+		 DBVehicle vehicle7= new DBVehicle("UEO93B", EVehicle.MOTORCYCLE, LocalDateTime.now(), 150);
+		 DBVehicle vehicle8= new DBVehicle("UEO93C", EVehicle.MOTORCYCLE, LocalDateTime.now(), 300);
+		 DBVehicle vehicle9= new DBVehicle("UEO93D", EVehicle.MOTORCYCLE, LocalDateTime.now(), 500);
 
 
 		 vehicleRepository.save(vehicle1);

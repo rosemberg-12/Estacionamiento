@@ -1,5 +1,7 @@
 package com.ceiba.parking.domain;
 
+import com.ceiba.parking.properties.ParkingProperties;
+
 /**
  * Define all kind of vehicles in the system.
  * @author rosemberg.porras
@@ -11,25 +13,36 @@ public enum EVehicle {
 
 		@Override
 		public Long getPricePerDay() {
-			return 8000L;
+			return Long.parseLong(ParkingProperties.getValue("PRICE_PER_DAY_CAR"));
 		}
 
 		@Override
 		public Long getPricePerHour() {
-			return 1000L;
+			return Long.parseLong(ParkingProperties.getValue("PRICE_PER_HOUR_CAR"));
+		}
+
+		@Override
+		public Integer getMaxCapacity() {
+			return Integer.parseInt(ParkingProperties.getValue("MAX_CARS"));
 		}
 		
+		
 	},
-	MOTOCYCLE{
+	MOTORCYCLE{
 
 		@Override
 		public Long getPricePerDay() {
-			return 4000L;
+			return Long.parseLong(ParkingProperties.getValue("PRICE_PER_DAY_MOTORCYCLE"));
 		}
 
 		@Override
 		public Long getPricePerHour() {
-			return 500L;
+			return Long.parseLong(ParkingProperties.getValue("PRICE_PER_HOUR_MOTORCYCLE"));
+		}
+
+		@Override
+		public Integer getMaxCapacity() {
+			return Integer.parseInt(ParkingProperties.getValue("MAX_MOTORCYCLES"));
 		}
 		
 	};
@@ -44,4 +57,9 @@ public enum EVehicle {
 	 * @return
 	 */
 	public abstract Long getPricePerHour();
+	
+	/**
+	 * Define the Max capacity allowed
+	 */
+	public abstract Integer getMaxCapacity();
 }

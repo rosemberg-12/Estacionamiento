@@ -6,8 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.ceiba.parking.controller.ParkingController;
+import com.ceiba.parking.domain.EVehicle;
 import com.ceiba.parking.domain.FilterVehicle;
 import com.ceiba.parking.domain.Vehicle;
+import com.ceiba.parking.exceptions.ParkingException;
 
 /**
  * Facade which expose the methods exposed by System.
@@ -19,8 +21,36 @@ public class Facade {
 	@Autowired
 	private ParkingController controller;
 	
+	/**
+	 * Get all the vehicles given a filter criteria.
+	 * @param filter
+	 * @return
+	 */
 	public List<Vehicle> getVehicles(FilterVehicle filter){
 		return controller.getAllVehicle(filter);
 	}
+	
 
+	/**
+	 * park a car, in the case that was not possible, will throw a business exception with the respective message.
+	 * @param numberPlate
+	 * @return
+	 */
+	public void registerVehicle (Vehicle vehicle) throws ParkingException {
+		controller.registerVehicle(vehicle);
+	}
+	
+	/**
+	 * Get the vacancy of the cars in the parking.
+	 */
+	public Integer getCarVacancy(){
+		return EVehicle.CAR.getMaxCapacity()-controller.getQuantityOfCars();
+	}
+	
+	/**
+	 * Get the vacancy of the cars in the parking.
+	 */
+	public Integer getMotorcycleVacancy(){
+		return EVehicle.MOTORCYCLE.getMaxCapacity()-controller.getQuantityOfMotorcycles();
+	}
 }

@@ -1,6 +1,6 @@
 package com.ceiba.parking.domain;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import com.ceiba.parking.entities.DBVehicle;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -17,12 +17,12 @@ public class Vehicle {
 	private String numberPlate;
 	private EVehicle kindOfVehicle;
 	private Integer cylinderCapacity;
-	private Date dateOfEntry;
+	private LocalDateTime dateOfEntry;
 	
 	protected Vehicle(){
 		
 	}
-	public Vehicle(Long id,String numberPlate, EVehicle kindOfVehicle, Date dateOfEntry, Integer cylinderCapacity) {
+	public Vehicle(Long id,String numberPlate, EVehicle kindOfVehicle, LocalDateTime dateOfEntry, Integer cylinderCapacity) {
 		super();
 		this.id=id;
 		this.numberPlate = numberPlate;
@@ -50,10 +50,10 @@ public class Vehicle {
 	public void setKindOfVehicle(EVehicle kindOfVehicle) {
 		this.kindOfVehicle = kindOfVehicle;
 	}
-	public Date getDateOfEntry() {
+	public LocalDateTime getDateOfEntry() {
 		return dateOfEntry;
 	}
-	public void setDateOfEntry(Date dateOfEntry) {
+	public void setDateOfEntry(LocalDateTime dateOfEntry) {
 		this.dateOfEntry = dateOfEntry;
 	}
 	@JsonIgnore
@@ -64,9 +64,11 @@ public class Vehicle {
 	public void setId(Long id) {
 		this.id = id;
 	}
+	@JsonIgnore
 	public Integer getCylinderCapacity() {
 		return cylinderCapacity;
 	}
+	@JsonIgnore
 	public void setCylinderCapacity(Integer cylinderCapacity) {
 		this.cylinderCapacity = cylinderCapacity;
 	}

@@ -1,5 +1,5 @@
 package com.ceiba.parking.entities;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -20,14 +20,14 @@ public class DBVehicle {
 	private Long id;
 	private String numberPlate;
 	private EVehicle kindOfVehicle;
-	private Date dateOfEntry;
+	private LocalDateTime dateOfEntry;
 	private Integer cylinderCapacity;
 	
 	public DBVehicle(){
 		
 	}
 	
-	public DBVehicle(String numberPlate, EVehicle kindOfVehicle, Date dateOfEntry, Integer cylinderCapacity) {
+	public DBVehicle(String numberPlate, EVehicle kindOfVehicle, LocalDateTime dateOfEntry, Integer cylinderCapacity) {
 		super();
 		this.numberPlate = numberPlate;
 		this.kindOfVehicle = kindOfVehicle;
@@ -46,10 +46,10 @@ public class DBVehicle {
 	public void setKindOfVehicle(EVehicle kindOfVehicle) {
 		this.kindOfVehicle = kindOfVehicle;
 	}
-	public Date getDateOfEntry() {
+	public LocalDateTime getDateOfEntry() {
 		return dateOfEntry;
 	}
-	public void setDateOfEntry(Date dateOfEntry) {
+	public void setDateOfEntry(LocalDateTime dateOfEntry) {
 		this.dateOfEntry = dateOfEntry;
 	}
 	public Long getId() {
