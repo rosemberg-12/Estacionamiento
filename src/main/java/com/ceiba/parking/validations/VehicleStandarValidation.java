@@ -28,7 +28,7 @@ public class VehicleStandarValidation implements ParkingValidation{
 
 
 	private boolean validVehicle(){
-		return vehicle != null || vehicle.getNumberPlate()!=null;
+		return vehicle != null && vehicle.getNumberPlate()!=null && vehicle.getKindOfVehicle()!=null;
 	}
 
 	private boolean validMotocycle(){

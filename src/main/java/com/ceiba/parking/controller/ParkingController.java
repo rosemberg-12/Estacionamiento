@@ -1,5 +1,6 @@
 package com.ceiba.parking.controller;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -7,6 +8,7 @@ import java.util.stream.Collectors;
 
 import org.assertj.core.util.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Component;
 
 import com.ceiba.parking.domain.EVehicle;
@@ -14,6 +16,7 @@ import com.ceiba.parking.domain.FilterVehicle;
 import com.ceiba.parking.domain.Vehicle;
 import com.ceiba.parking.entities.DBVehicle;
 import com.ceiba.parking.repository.VehicleRepository;
+import com.ceiba.parking.validations.ExistVehicleValidation;
 import com.ceiba.parking.validations.MaxCapacityValidation;
 import com.ceiba.parking.validations.NumberPlateValidation;
 import com.ceiba.parking.validations.ParkingValidation;
@@ -63,7 +66,7 @@ public class ParkingController {
 	 */
 	public void registerVehicle(Vehicle vehicle){
 		
-		ValidationEvaluator.evaluateMultipleValidations(getInitialVehicleValidation(vehicle));
+		ValidationEvaluator.evaluateMultipleValidations(getRegisterVehicleValidations(vehicle));
 		
 		if(vehicle.getKindOfVehicle()== EVehicle.CAR){
 			ValidationEvaluator.evaluateMultipleValidations(getCarValidations(vehicle));
@@ -76,6 +79,85 @@ public class ParkingController {
 		repository.save(vehicle.toEntity());
 	}
 	
+
+	/**
+	 * Unregister a vehicle.
+	 * @param vehicle
+	 * @return
+	 */
+	public Pair<Vehicle, Long> unRegisterVehicle(Vehicle vehicle) {
+		
+		ValidationEvaluator.evaluateSingleValidation(new ExistVehicleValidation(repository, vehicle));
+		
+		Pair<Vehicle, Long> pairToReturn=null;
+		Vehicle full=new Vehicle(repository.findByNumberPlate(vehicle.getNumberPlate()).get(0));
+		
+		if(full.getKindOfVehicle()== EVehicle.CAR){
+			pairToReturn=getCostOfCar(full);
+		}
+		else if(full.getKindOfVehicle()== EVehicle.MOTORCYCLE){
+			pairToReturn=getCostOfMotorcycle(full);
+		}
+		if(pairToReturn!=null){
+			repository.delete(pairToReturn.getFirst().toEntity());
+		}
+		return pairToReturn;
+	}
+	
+	private Pair<Vehicle, Long> getCostOfCar(Vehicle vehicle) {
+
+		LocalDateTime start=vehicle.getDateOfEntry();
+		LocalDateTime now=today();
+		
+		long numberOfHours = Duration.between(start, now).toHours();
+
+		if(Duration.between(start, now).toMinutes()%60!=0){
+			numberOfHours++;
+		}
+		
+		if(numberOfHours==0){
+			numberOfHours++;
+		}
+
+		long numberOfDays=numberOfHours/24;
+		long extraHours=numberOfHours%24;
+		
+		if(extraHours>9){
+			extraHours=0;
+			numberOfDays++;
+		}
+
+		return Pair.of(vehicle, (extraHours*EVehicle.CAR.getPricePerHour())+(numberOfDays*EVehicle.CAR.getPricePerDay()));
+	}
+	
+	private Pair<Vehicle, Long> getCostOfMotorcycle(Vehicle vehicle) {
+		
+		LocalDateTime start=vehicle.getDateOfEntry();
+		LocalDateTime now=today();
+		
+		long numberOfHours = Duration.between(start, now).toHours();
+		
+		if(Duration.between(start, now).toMinutes()%60!=0){
+			numberOfHours++;
+		}
+		
+		if(numberOfHours==0){
+			numberOfHours++;
+		}
+
+		long numberOfDays=numberOfHours/24;
+		long extraHours=numberOfHours%24;
+		
+		if(extraHours>9){
+			extraHours=0;
+			numberOfDays++;
+		}
+
+		return Pair.of(vehicle, (vehicle.getCylinderCapacity()>500?2000:0)+
+				(extraHours*EVehicle.MOTORCYCLE.getPricePerHour())+
+				(numberOfDays*EVehicle.MOTORCYCLE.getPricePerDay()));
+	}
+
 	/**
 	 * Return the quantity of cars stored in the parking.
 	 * @return
@@ -115,11 +197,12 @@ public class ParkingController {
 		return validations;
 	}
 	
-	private List<ParkingValidation> getInitialVehicleValidation(Vehicle vehicle){
+	private List<ParkingValidation> getRegisterVehicleValidations(Vehicle vehicle){
 		List<ParkingValidation> validations=Lists.newArrayList();
 		validations.add(new VehicleStandarValidation(vehicle));
 		validations.add(new UniqueVehicleValidation(repository, vehicle));
 		return validations;
 	}
+
 
 }

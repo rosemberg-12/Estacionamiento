@@ -4,6 +4,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.util.Pair;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,6 +15,7 @@ import com.ceiba.parking.domain.Vehicle;
 import com.ceiba.parking.facade.Facade;
 import com.ceiba.parking.transport.DefaultRestResponse;
 import com.ceiba.parking.transport.MessageRestResponse;
+import com.ceiba.parking.transport.UnparkingRestResponse;
 import com.ceiba.parking.transport.VehiclesRestResponse;
 /**
  * Rest class 
@@ -103,6 +105,23 @@ public class ParkingRest {
 		MessageRestResponse response= new MessageRestResponse();
 		try{
 			fachada.registerVehicle(vehicle);
+			response.setResponse(true);
+		}
+		catch(Exception e){
+			response.setNameException(e.getClass().getSimpleName());
+			response.setMessageException(e.getMessage());
+			LOGGER.log(Level.SEVERE, null, e);
+		}
+		return response;
+	}
+	
+	@PostMapping("/unregisterVehicle")
+	public UnparkingRestResponse unregisterVehicle(@RequestBody Vehicle vehicle){
+		UnparkingRestResponse response= new UnparkingRestResponse();
+		try{
+			Pair<Vehicle, Long>pair=fachada.unParkingVehicle(vehicle);
+			response.setCostOfParking(pair.getSecond());
+			response.setVehicleUnparked(pair.getFirst());
 			response.setResponse(true);
 		}
 		catch(Exception e){

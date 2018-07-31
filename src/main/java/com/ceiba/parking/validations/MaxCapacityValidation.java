@@ -2,8 +2,6 @@ package com.ceiba.parking.validations;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.ceiba.parking.domain.EVehicle;
 import com.ceiba.parking.domain.Vehicle;
 import com.ceiba.parking.properties.ParkingProperties;
@@ -25,7 +23,15 @@ public class MaxCapacityValidation implements ParkingValidation{
 
 	@Override
 	public String invalidationMessage() {
-		return ParkingProperties.getValue("ERROR_NO_VACANCY_CARS");
+		if(vehicleToValid==EVehicle.CAR){
+			return ParkingProperties.getValue("ERROR_NO_VACANCY_CARS");
+		}
+		else if(vehicleToValid==EVehicle.MOTORCYCLE){
+			return ParkingProperties.getValue("ERROR_NO_VACANCY_MOTORCYCLE");
+		}
+		else{
+			return "";
+		}
 	}
 
 }

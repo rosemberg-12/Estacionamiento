@@ -32,6 +32,7 @@ public class Vehicle {
 	}
 	
 	public Vehicle(DBVehicle dbVehicle){
+		this.id=dbVehicle.getId();
 		this.numberPlate=dbVehicle.getNumberPlate();
 		this.kindOfVehicle=dbVehicle.getKindOfVehicle();
 		this.cylinderCapacity=dbVehicle.getCylinderCapacity();
@@ -64,17 +65,18 @@ public class Vehicle {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	@JsonIgnore
+
 	public Integer getCylinderCapacity() {
 		return cylinderCapacity;
 	}
-	@JsonIgnore
+
 	public void setCylinderCapacity(Integer cylinderCapacity) {
 		this.cylinderCapacity = cylinderCapacity;
 	}
 	@JsonIgnore
 	public DBVehicle toEntity() {
 	    DBVehicle dbVehicle = new DBVehicle();
+	    dbVehicle.setId(getId());
 	    dbVehicle.setNumberPlate(getNumberPlate());
 	    dbVehicle.setKindOfVehicle(getKindOfVehicle());
 	    dbVehicle.setCylinderCapacity(getCylinderCapacity());

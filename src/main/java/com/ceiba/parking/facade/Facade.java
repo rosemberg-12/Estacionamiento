@@ -3,6 +3,7 @@ package com.ceiba.parking.facade;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Component;
 
 import com.ceiba.parking.controller.ParkingController;
@@ -52,5 +53,13 @@ public class Facade {
 	 */
 	public Integer getMotorcycleVacancy(){
 		return EVehicle.MOTORCYCLE.getMaxCapacity()-controller.getQuantityOfMotorcycles();
+	}
+	
+	/**
+	 * Get the cost of parking of a vehicle by number of plate.
+	 * 
+	 */
+	public Pair<Vehicle, Long> unParkingVehicle(Vehicle vehicle){
+		return controller.unRegisterVehicle(vehicle);
 	}
 }
