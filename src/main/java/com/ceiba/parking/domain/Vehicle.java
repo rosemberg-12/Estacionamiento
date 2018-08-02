@@ -39,40 +39,41 @@ public class Vehicle {
 		this.dateOfEntry=dbVehicle.getDateOfEntry();
 	}
 	
-	public String getNumberPlate() {
-		return numberPlate;
-	}
 	public void setNumberPlate(String numberPlate) {
 		this.numberPlate = numberPlate;
+	}
+	public String getNumberPlate() {
+		return numberPlate;
 	}
 	public EVehicle getKindOfVehicle() {
 		return kindOfVehicle;
 	}
-	public void setKindOfVehicle(EVehicle kindOfVehicle) {
-		this.kindOfVehicle = kindOfVehicle;
-	}
 	public LocalDateTime getDateOfEntry() {
 		return dateOfEntry;
 	}
-	public void setDateOfEntry(LocalDateTime dateOfEntry) {
-		this.dateOfEntry = dateOfEntry;
+	public void setKindOfVehicle(EVehicle kindOfVehicle) {
+		this.kindOfVehicle = kindOfVehicle;
 	}
 	@JsonIgnore
 	public Long getId() {
 		return id;
+	}
+	public void setDateOfEntry(LocalDateTime dateOfEntry) {
+		this.dateOfEntry = dateOfEntry;
 	}
 	@JsonIgnore
 	public void setId(Long id) {
 		this.id = id;
 	}
 
+	public void setCylinderCapacity(Integer cylinderCapacity) {
+		this.cylinderCapacity = cylinderCapacity;
+	}
+	
 	public Integer getCylinderCapacity() {
 		return cylinderCapacity;
 	}
 
-	public void setCylinderCapacity(Integer cylinderCapacity) {
-		this.cylinderCapacity = cylinderCapacity;
-	}
 	@JsonIgnore
 	public DBVehicle toEntity() {
 	    DBVehicle dbVehicle = new DBVehicle();
