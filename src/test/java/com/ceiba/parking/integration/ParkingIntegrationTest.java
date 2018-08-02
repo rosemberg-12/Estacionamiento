@@ -183,6 +183,22 @@ public class ParkingIntegrationTest {
 		}
 	}
 	
+	/**
+	 * Valid the register of vehicles with plate starting with 'A' only Sunday and Monday.
+	 */
+	@Test
+	public void registerCarSpecialLetterMonday_Test(){
+		
+		Vehicle vehicle=new VehicleBuilder().withNumberPlate(ParkingProperties.getValue("SPECIAL_LETTER_PLATE")+"CC000").withKindOfVehicle(EVehicle.CAR).build();
+		when(controllerImp.today()).thenReturn(this.now.plusDays(5));
+		try{
+			fachada.registerVehicle(vehicle);
+			fail("Car With invalid start letter, error");
+		}catch(ParkingException ex){
+			Assert.assertTrue("Car With invalid start letter, not inserted",ex.getMessage().equals(ParkingProperties.getValue("ERROR_VALIDATION_PLATE")));
+		}
+	}
+	
 	@Test
 	public void registerMotorcycle_Test(){
 		
@@ -269,6 +285,22 @@ public class ParkingIntegrationTest {
 		
 		Vehicle vehicle=new VehicleBuilder().withNumberPlate(ParkingProperties.getValue("SPECIAL_LETTER_PLATE")+"MM000").withKindOfVehicle(EVehicle.MOTORCYCLE).withCylinderCapacity(500).build();
 		when(controllerImp.today()).thenReturn(this.now.plusDays(4));
+		try{
+			fachada.registerVehicle(vehicle);
+			fail("Motorcycle With invalid start letter, error");
+		}catch(ParkingException ex){
+			Assert.assertTrue("Motorcycle With invalid start letter, not inserted",ex.getMessage().equals(ParkingProperties.getValue("ERROR_VALIDATION_PLATE")));
+		}
+	}
+	
+	/**
+	 * Valid the register of vehicles with plate starting with 'A' only Sunday and Monday.
+	 */
+	@Test
+	public void registerMotorcycleSpecialLetterMonday_Test(){
+		
+		Vehicle vehicle=new VehicleBuilder().withNumberPlate(ParkingProperties.getValue("SPECIAL_LETTER_PLATE")+"MM000").withKindOfVehicle(EVehicle.MOTORCYCLE).withCylinderCapacity(500).build();
+		when(controllerImp.today()).thenReturn(this.now.plusDays(5));
 		try{
 			fachada.registerVehicle(vehicle);
 			fail("Motorcycle With invalid start letter, error");
