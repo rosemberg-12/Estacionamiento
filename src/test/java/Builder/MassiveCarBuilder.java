@@ -1,12 +1,12 @@
 package Builder;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.ceiba.parking.domain.EVehicle;
 import com.ceiba.parking.domain.Vehicle;
 import com.ceiba.parking.entities.DBVehicle;
-import com.google.common.collect.Lists;
 
 public class MassiveCarBuilder {
 	private final static String PLATE="XXX";
@@ -14,7 +14,7 @@ public class MassiveCarBuilder {
 
 	
 	public static List<Vehicle> generateMultipleVehicles(int numberOfVehicles, EVehicle kind){
-		List<Vehicle> vehicles= Lists.newArrayList();
+		List<Vehicle> vehicles= new ArrayList<Vehicle>();
 		
 		for(int i=1; i<=numberOfVehicles; i++){
 			vehicles.add(new VehicleBuilder().withNumberPlate(PLATE+i).withKindOfVehicle(kind).
@@ -23,7 +23,7 @@ public class MassiveCarBuilder {
 		return vehicles;
 	}
 	public static List<DBVehicle> generateMultipleVehiclesDB(int numberOfVehicles, EVehicle kind){
-		List<DBVehicle> vehicles= Lists.newArrayList();
+		List<DBVehicle> vehicles= new ArrayList<DBVehicle>();
 		
 		for(int i=1; i<=numberOfVehicles; i++){
 			vehicles.add(new DBVehicleBuilder().withNumberPlate(PLATE+(i+100)).withKindOfVehicle(kind).

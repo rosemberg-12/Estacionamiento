@@ -7,7 +7,6 @@ import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Component;
 
 import com.ceiba.parking.controller.IParkingController;
-import com.ceiba.parking.controller.ParkingControllerImp;
 import com.ceiba.parking.domain.EVehicle;
 import com.ceiba.parking.domain.FilterVehicle;
 import com.ceiba.parking.domain.Vehicle;

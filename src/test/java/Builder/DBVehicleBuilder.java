@@ -3,7 +3,6 @@ package Builder;
 import java.time.LocalDateTime;
 
 import com.ceiba.parking.domain.EVehicle;
-import com.ceiba.parking.domain.Vehicle;
 import com.ceiba.parking.entities.DBVehicle;
 
 public final class DBVehicleBuilder {

@@ -1,6 +1,5 @@
 package com.ceiba.parking.controller;
 
-import java.io.Serializable;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -19,9 +18,9 @@ import com.ceiba.parking.entities.DBVehicle;
 import com.ceiba.parking.repository.VehicleRepository;
 import com.ceiba.parking.validation.evaluator.ValidationEvaluator;
 import com.ceiba.parking.validations.ExistVehicleValidation;
+import com.ceiba.parking.validations.IParkingValidation;
 import com.ceiba.parking.validations.MaxCapacityValidation;
 import com.ceiba.parking.validations.NumberPlateValidation;
-import com.ceiba.parking.validations.IParkingValidation;
 import com.ceiba.parking.validations.UniqueVehicleValidation;
 import com.ceiba.parking.validations.VehicleStandarValidation;
 
