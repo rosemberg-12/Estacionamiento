@@ -4,7 +4,7 @@ import com.ceiba.parking.domain.Vehicle;
 import com.ceiba.parking.properties.ParkingProperties;
 import com.ceiba.parking.repository.VehicleRepository;
 
-public class ExistVehicleValidation implements ParkingValidation {
+public class ExistVehicleValidation implements IParkingValidation {
 	private VehicleRepository repo;
 	private Vehicle vehicle;
 	

@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 
 import com.ceiba.parking.properties.ParkingProperties;
 
-public class NumberPlateValidation implements ParkingValidation{
+public class NumberPlateValidation implements IParkingValidation{
 
 	private String numberPlate;
 	private LocalDateTime today;
@@ -17,7 +17,8 @@ public class NumberPlateValidation implements ParkingValidation{
 	
 	@Override
 	public boolean valid() {
-		return !(numberPlate.startsWith("A") && (today.getDayOfWeek()==DayOfWeek.SUNDAY || today.getDayOfWeek()==DayOfWeek.MONDAY));
+		return !(numberPlate.startsWith(ParkingProperties.getValue("SPECIAL_LETTER_PLATE")) && 
+				(today.getDayOfWeek()==DayOfWeek.SUNDAY || today.getDayOfWeek()==DayOfWeek.MONDAY));
 	}
 
 	@Override

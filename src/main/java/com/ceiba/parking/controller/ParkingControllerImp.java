@@ -1,5 +1,6 @@
 package com.ceiba.parking.controller;
 
+import java.io.Serializable;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -9,19 +10,19 @@ import java.util.stream.Collectors;
 import org.assertj.core.util.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.util.Pair;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import com.ceiba.parking.domain.EVehicle;
 import com.ceiba.parking.domain.FilterVehicle;
 import com.ceiba.parking.domain.Vehicle;
 import com.ceiba.parking.entities.DBVehicle;
 import com.ceiba.parking.repository.VehicleRepository;
+import com.ceiba.parking.validation.evaluator.ValidationEvaluator;
 import com.ceiba.parking.validations.ExistVehicleValidation;
 import com.ceiba.parking.validations.MaxCapacityValidation;
 import com.ceiba.parking.validations.NumberPlateValidation;
-import com.ceiba.parking.validations.ParkingValidation;
+import com.ceiba.parking.validations.IParkingValidation;
 import com.ceiba.parking.validations.UniqueVehicleValidation;
-import com.ceiba.parking.validations.ValidationEvaluator;
 import com.ceiba.parking.validations.VehicleStandarValidation;
 
 /**
@@ -29,8 +30,9 @@ import com.ceiba.parking.validations.VehicleStandarValidation;
  * @author rosemberg.porras
  *
  */
-@Component("ParkingController")
-public class ParkingController {
+@Service
+public class ParkingControllerImp implements IParkingController{
+	
 	@Autowired 
 	VehicleRepository repository;
 	
@@ -104,6 +106,32 @@ public class ParkingController {
 		return pairToReturn;
 	}
 	
+
+	/**
+	 * Return the quantity of cars stored in the parking.
+	 * @return
+	 */
+	public int getQuantityOfCars(){
+		return repository.findByKindOfVehicle(EVehicle.CAR).size();
+	}
+	
+	/**
+	 * Return the quantity of cars stored in the parking.
+	 * @return
+	 */
+	public int getQuantityOfMotorcycles(){
+		return repository.findByKindOfVehicle(EVehicle.MOTORCYCLE).size();
+	}
+	
+	/**
+	 * Return today date.
+	 * @return date
+	 */
+	public LocalDateTime today(){
+		return LocalDateTime.now();
+	}
+
+	
 	private Pair<Vehicle, Long> getCostOfCar(Vehicle vehicle) {
 
 		LocalDateTime start=vehicle.getDateOfEntry();
@@ -158,47 +186,22 @@ public class ParkingController {
 				(numberOfDays*EVehicle.MOTORCYCLE.getPricePerDay()));
 	}
 
-	/**
-	 * Return the quantity of cars stored in the parking.
-	 * @return
-	 */
-	public int getQuantityOfCars(){
-		return repository.findByKindOfVehicle(EVehicle.CAR).size();
-	}
-	
-	/**
-	 * Return the quantity of cars stored in the parking.
-	 * @return
-	 */
-	public int getQuantityOfMotorcycles(){
-		return repository.findByKindOfVehicle(EVehicle.MOTORCYCLE).size();
-	}
-	
-	/**
-	 * Return today date.
-	 * @return date
-	 */
-	public LocalDateTime today(){
-		return LocalDateTime.now();
-	}
-
-
-	private List<ParkingValidation> getCarValidations(Vehicle car){
-		List<ParkingValidation> validations=Lists.newArrayList();
+	private List<IParkingValidation> getCarValidations(Vehicle car){
+		List<IParkingValidation> validations=Lists.newArrayList();
 		validations.add(new MaxCapacityValidation(getAllVehicle(FilterVehicle.SEARCH_CAR),EVehicle.CAR));
 		validations.add(new NumberPlateValidation(car.getNumberPlate(), today()));
 		return validations;
 	}
 	
-	private List<ParkingValidation> getMotorcycleValidations(Vehicle motorcycle){
-		List<ParkingValidation> validations=Lists.newArrayList();
+	private List<IParkingValidation> getMotorcycleValidations(Vehicle motorcycle){
+		List<IParkingValidation> validations=Lists.newArrayList();
 		validations.add(new MaxCapacityValidation(getAllVehicle(FilterVehicle.SEARCH_MOTORCYCLE),EVehicle.MOTORCYCLE));
 		validations.add(new NumberPlateValidation(motorcycle.getNumberPlate(), today()));
 		return validations;
 	}
 	
-	private List<ParkingValidation> getRegisterVehicleValidations(Vehicle vehicle){
-		List<ParkingValidation> validations=Lists.newArrayList();
+	private List<IParkingValidation> getRegisterVehicleValidations(Vehicle vehicle){
+		List<IParkingValidation> validations=Lists.newArrayList();
 		validations.add(new VehicleStandarValidation(vehicle));
 		validations.add(new UniqueVehicleValidation(repository, vehicle));
 		return validations;

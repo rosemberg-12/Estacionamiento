@@ -6,7 +6,7 @@ import com.ceiba.parking.domain.EVehicle;
 import com.ceiba.parking.domain.Vehicle;
 import com.ceiba.parking.properties.ParkingProperties;
 
-public class MaxCapacityValidation implements ParkingValidation{
+public class MaxCapacityValidation implements IParkingValidation{
 	
 	private List<Vehicle>vehicles;
 	private EVehicle vehicleToValid;

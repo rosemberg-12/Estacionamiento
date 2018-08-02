@@ -9,7 +9,7 @@ import com.ceiba.parking.properties.ParkingProperties;
  * @author rosemberg.porras
  *
  */
-public class VehicleStandarValidation implements ParkingValidation{
+public class VehicleStandarValidation implements IParkingValidation{
 	
 	private Vehicle vehicle;
 	
@@ -28,7 +28,7 @@ public class VehicleStandarValidation implements ParkingValidation{
 
 
 	private boolean validVehicle(){
-		return vehicle != null && vehicle.getNumberPlate()!=null && vehicle.getKindOfVehicle()!=null;
+		return vehicle != null && vehicle.getNumberPlate()!=null && !vehicle.getNumberPlate().isEmpty() && vehicle.getKindOfVehicle()!=null;
 	}
 
 	private boolean validMotocycle(){

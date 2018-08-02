@@ -5,7 +5,7 @@ package com.ceiba.parking.validations;
  * @author rosemberg.porras
  *
  */
-public interface ParkingValidation {
+public interface IParkingValidation {
 
 	/**
 	 * Method which define if the validation is okey or not.

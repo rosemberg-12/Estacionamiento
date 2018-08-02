@@ -1,4 +1,4 @@
-package com.ceiba.parking.parking;
+package com.ceiba.parking;
 
 import java.time.LocalDateTime;
 
@@ -17,12 +17,7 @@ import com.ceiba.parking.domain.EVehicle;
 import com.ceiba.parking.entities.DBVehicle;
 import com.ceiba.parking.repository.VehicleRepository;
 
-@SpringBootApplication(scanBasePackages = {"com.ceiba.parking"})
-@ComponentScan({"com.ceiba.parking"})
-@EnableJpaRepositories("com.ceiba.parking.repository")
-@EntityScan("com.ceiba.parking.entities")
-@ServletComponentScan({"com.ceiba.parking.rest"})
-	
+@SpringBootApplication
 public class ParkingApplication implements CommandLineRunner {
 	
     @Autowired
@@ -38,22 +33,16 @@ public class ParkingApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 		
-		 DBVehicle vehicle1= new DBVehicle("UEO930", EVehicle.CAR, LocalDateTime.now(), null);
-		 DBVehicle vehicle2= new DBVehicle("UEO931", EVehicle.CAR, LocalDateTime.now(), null);
-
-		 
-		 DBVehicle vehicle6= new DBVehicle("UEO93A", EVehicle.MOTORCYCLE, LocalDateTime.now(), 100);
-		 DBVehicle vehicle7= new DBVehicle("UEO93B", EVehicle.MOTORCYCLE, LocalDateTime.now(), 150);
-
-
-
-		 vehicleRepository.save(vehicle1);
-		 vehicleRepository.save(vehicle2);
-
-		 vehicleRepository.save(vehicle6);
-		 vehicleRepository.save(vehicle7);
-
-		 
+//		 DBVehicle vehicle1= new DBVehicle("UEO930", EVehicle.CAR, LocalDateTime.now(), null);
+//		 DBVehicle vehicle2= new DBVehicle("UEO931", EVehicle.CAR, LocalDateTime.now(), null);
+//
+//		 DBVehicle vehicle6= new DBVehicle("UEO93A", EVehicle.MOTORCYCLE, LocalDateTime.now(), 100);
+//		 DBVehicle vehicle7= new DBVehicle("UEO93B", EVehicle.MOTORCYCLE, LocalDateTime.now(), 150);
+//
+//		 vehicleRepository.save(vehicle1);
+//		 vehicleRepository.save(vehicle2);
+//		 vehicleRepository.save(vehicle6);
+//		 vehicleRepository.save(vehicle7);
 	}
 
 }

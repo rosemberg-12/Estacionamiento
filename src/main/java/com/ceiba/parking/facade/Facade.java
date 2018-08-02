@@ -6,7 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Component;
 
-import com.ceiba.parking.controller.ParkingController;
+import com.ceiba.parking.controller.IParkingController;
+import com.ceiba.parking.controller.ParkingControllerImp;
 import com.ceiba.parking.domain.EVehicle;
 import com.ceiba.parking.domain.FilterVehicle;
 import com.ceiba.parking.domain.Vehicle;
@@ -20,7 +21,7 @@ import com.ceiba.parking.exceptions.ParkingException;
 @Component("Facade")
 public class Facade {
 	@Autowired
-	private ParkingController controller;
+	private IParkingController controller;
 	
 	/**
 	 * Get all the vehicles given a filter criteria.
