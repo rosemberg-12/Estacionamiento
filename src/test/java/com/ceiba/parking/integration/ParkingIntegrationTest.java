@@ -332,6 +332,18 @@ public class ParkingIntegrationTest {
 	}
 	
 	@Test
+	public void unparkingCarOneDayIncomplete_Test(){
+		
+		Vehicle vehicle=new VehicleBuilder().withNumberPlate("CCC000").withKindOfVehicle(EVehicle.CAR).build();
+		when(controllerImp.today()).thenReturn(now);
+		fachada.registerVehicle(vehicle);
+		when(controllerImp.today()).thenReturn(now.plusHours(11));
+		Pair<Vehicle,Long> output=fachada.unParkingVehicle(vehicle);
+		Assert.assertTrue("Price according per 1 Day",output.getSecond().equals(8000L));
+	}
+	
+	
+	@Test
 	public void unparkingCarNotExistPlate_Test(){
 		
 		Vehicle vehicle=new VehicleBuilder().withNumberPlate("CCC000").withKindOfVehicle(EVehicle.CAR).build();
@@ -348,14 +360,69 @@ public class ParkingIntegrationTest {
 	}
 	
 	@Test
-	public void unparkingMotorcycleOneHour_Test(){
+	public void unparkingMotorcycleOneHour_MinCC_Test(){
 		
 		Vehicle vehicle=new VehicleBuilder().withNumberPlate("MMM000").withKindOfVehicle(EVehicle.MOTORCYCLE).withCylinderCapacity(400).build();
 		when(controllerImp.today()).thenReturn(now);
 		fachada.registerVehicle(vehicle);
 		when(controllerImp.today()).thenReturn(now.plusMinutes(50));
 		Pair<Vehicle,Long> output=fachada.unParkingVehicle(vehicle);
-		Assert.assertTrue("Price according per 1 hour",output.getSecond().equals(500L));
+		Assert.assertTrue("Price according per 1 hour short CC",output.getSecond().equals(500L));
+	}
+	
+	@Test
+	public void unparkingMotorcycleOneHour_MaxCC_Test(){
+		
+		Vehicle vehicle=new VehicleBuilder().withNumberPlate("MMM000").withKindOfVehicle(EVehicle.MOTORCYCLE).withCylinderCapacity(600).build();
+		when(controllerImp.today()).thenReturn(now);
+		fachada.registerVehicle(vehicle);
+		when(controllerImp.today()).thenReturn(now.plusMinutes(50));
+		Pair<Vehicle,Long> output=fachada.unParkingVehicle(vehicle);
+		Assert.assertTrue("Price according per 1 hour and big CC",output.getSecond().equals(2500L));
+	}
+	
+	@Test
+	public void unparkingMotorcycleOneDayFull_MinCC_Test(){
+		
+		Vehicle vehicle=new VehicleBuilder().withNumberPlate("MMM000").withKindOfVehicle(EVehicle.MOTORCYCLE).withCylinderCapacity(400).build();
+		when(controllerImp.today()).thenReturn(now);
+		fachada.registerVehicle(vehicle);
+		when(controllerImp.today()).thenReturn(now.plusDays(1));
+		Pair<Vehicle,Long> output=fachada.unParkingVehicle(vehicle);
+		Assert.assertTrue("Price according per 1 Day",output.getSecond().equals(4000L));
+	}
+	
+	@Test
+	public void unparkingMotorcycleOneDayFull_MaxCC_Test(){
+		
+		Vehicle vehicle=new VehicleBuilder().withNumberPlate("MMM000").withKindOfVehicle(EVehicle.MOTORCYCLE).withCylinderCapacity(600).build();
+		when(controllerImp.today()).thenReturn(now);
+		fachada.registerVehicle(vehicle);
+		when(controllerImp.today()).thenReturn(now.plusDays(1));
+		Pair<Vehicle,Long> output=fachada.unParkingVehicle(vehicle);
+		Assert.assertTrue("Price according per 1 Day",output.getSecond().equals(6000L));
+	}
+	
+	@Test
+	public void unparkingMotorcycleOneDayIncomplete_MinCC_Test(){
+		
+		Vehicle vehicle=new VehicleBuilder().withNumberPlate("MMM000").withKindOfVehicle(EVehicle.MOTORCYCLE).withCylinderCapacity(400).build();
+		when(controllerImp.today()).thenReturn(now);
+		fachada.registerVehicle(vehicle);
+		when(controllerImp.today()).thenReturn(now.plusHours(11));
+		Pair<Vehicle,Long> output=fachada.unParkingVehicle(vehicle);
+		Assert.assertTrue("Price according per 1 Day",output.getSecond().equals(4000L));
+	}
+	
+	@Test
+	public void unparkingMotorcycleOneDayIncomplete_MaxCC_Test(){
+		
+		Vehicle vehicle=new VehicleBuilder().withNumberPlate("MMM000").withKindOfVehicle(EVehicle.MOTORCYCLE).withCylinderCapacity(600).build();
+		when(controllerImp.today()).thenReturn(now);
+		fachada.registerVehicle(vehicle);
+		when(controllerImp.today()).thenReturn(now.plusHours(11));
+		Pair<Vehicle,Long> output=fachada.unParkingVehicle(vehicle);
+		Assert.assertTrue("Price according per 1 Day",output.getSecond().equals(6000L));
 	}
 	
 	@Test
