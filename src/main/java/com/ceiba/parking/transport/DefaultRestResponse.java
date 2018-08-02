@@ -11,7 +11,7 @@ public class DefaultRestResponse {
 	private String nameException;
 	private String messageException;
 	
-	protected DefaultRestResponse(){
+	public DefaultRestResponse(){
 		
 	}
 	

@@ -102,7 +102,7 @@ public class ParkingRest {
 	
 	@PostMapping("/registerVehicle")
 	public DefaultRestResponse registerVehicle(@RequestBody Vehicle vehicle){
-		MessageRestResponse response= new MessageRestResponse();
+		DefaultRestResponse response= new DefaultRestResponse();
 		try{
 			fachada.registerVehicle(vehicle);
 			response.setResponse(true);
