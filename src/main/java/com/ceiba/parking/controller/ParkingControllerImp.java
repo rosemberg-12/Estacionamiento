@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.assertj.core.util.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
@@ -45,13 +44,16 @@ public class ParkingControllerImp implements IParkingController{
 		List<DBVehicle> dbList=null;
 		switch (filter){
 			case SEARCH_CAR:
-				dbList =Lists.newArrayList(repository.findByKindOfVehicle(EVehicle.CAR));
+				dbList =new ArrayList<>(repository.findByKindOfVehicle(EVehicle.CAR));
 				break;
 			case SEARCH_MOTORCYCLE:
-				dbList =Lists.newArrayList(repository.findByKindOfVehicle(EVehicle.MOTORCYCLE));
+				dbList =new ArrayList<>(repository.findByKindOfVehicle(EVehicle.MOTORCYCLE));
 				break;
 			case SEARCH_ALL:
-				dbList =Lists.newArrayList(repository.findAll());
+				dbList =new ArrayList<>();
+				for(DBVehicle e: repository.findAll()){
+					dbList.add(e);
+				}
 				break;
 		}
 		if(dbList!=null && !dbList.isEmpty()){
@@ -186,21 +188,21 @@ public class ParkingControllerImp implements IParkingController{
 	}
 
 	private List<IParkingValidation> getCarValidations(Vehicle car){
-		List<IParkingValidation> validations=Lists.newArrayList();
+		List<IParkingValidation> validations=new ArrayList<>();
 		validations.add(new MaxCapacityValidation(getAllVehicle(FilterVehicle.SEARCH_CAR),EVehicle.CAR));
 		validations.add(new NumberPlateValidation(car.getNumberPlate(), today()));
 		return validations;
 	}
 	
 	private List<IParkingValidation> getMotorcycleValidations(Vehicle motorcycle){
-		List<IParkingValidation> validations=Lists.newArrayList();
+		List<IParkingValidation> validations=new ArrayList<>();
 		validations.add(new MaxCapacityValidation(getAllVehicle(FilterVehicle.SEARCH_MOTORCYCLE),EVehicle.MOTORCYCLE));
 		validations.add(new NumberPlateValidation(motorcycle.getNumberPlate(), today()));
 		return validations;
 	}
 	
 	private List<IParkingValidation> getRegisterVehicleValidations(Vehicle vehicle){
-		List<IParkingValidation> validations=Lists.newArrayList();
+		List<IParkingValidation> validations=new ArrayList<>();
 		validations.add(new VehicleStandarValidation(vehicle));
 		validations.add(new UniqueVehicleValidation(repository, vehicle));
 		return validations;
