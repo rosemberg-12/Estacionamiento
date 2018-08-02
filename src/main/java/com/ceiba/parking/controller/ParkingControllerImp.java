@@ -94,13 +94,8 @@ public class ParkingControllerImp implements IParkingController{
 		
 		Pair<Vehicle, Long> pairToReturn=null;
 		Vehicle full=new Vehicle(repository.findByNumberPlate(vehicle.getNumberPlate()).get(0));
-		
-		if(full.getKindOfVehicle()== EVehicle.CAR){
-			pairToReturn=getCostOfCar(full);
-		}
-		else if(full.getKindOfVehicle()== EVehicle.MOTORCYCLE){
-			pairToReturn=getCostOfMotorcycle(full);
-		}
+		pairToReturn=getCostOfVehicle(full);
+
 		if(pairToReturn!=null){
 			repository.delete(pairToReturn.getFirst().toEntity());
 		}
@@ -133,7 +128,7 @@ public class ParkingControllerImp implements IParkingController{
 	}
 
 	
-	private Pair<Vehicle, Long> getCostOfCar(Vehicle vehicle) {
+	private Pair<Vehicle, Long> getCostOfVehicle(Vehicle vehicle) {
 
 		LocalDateTime start=vehicle.getDateOfEntry();
 		LocalDateTime now=today();
@@ -155,36 +150,15 @@ public class ParkingControllerImp implements IParkingController{
 			extraHours=0;
 			numberOfDays++;
 		}
-
-		return Pair.of(vehicle, (extraHours*EVehicle.CAR.getPricePerHour())+(numberOfDays*EVehicle.CAR.getPricePerDay()));
-	}
-	
-	private Pair<Vehicle, Long> getCostOfMotorcycle(Vehicle vehicle) {
-		
-		LocalDateTime start=vehicle.getDateOfEntry();
-		LocalDateTime now=today();
-		
-		long numberOfHours = Duration.between(start, now).toHours();
-		
-		if(Duration.between(start, now).toMinutes()%60!=0){
-			numberOfHours++;
+		if(vehicle.getKindOfVehicle()==EVehicle.CAR){
+			return Pair.of(vehicle, (extraHours*EVehicle.CAR.getPricePerHour())+(numberOfDays*EVehicle.CAR.getPricePerDay()));
 		}
-		
-		if(numberOfHours==0){
-			numberOfHours++;
+		else if(vehicle.getKindOfVehicle()==EVehicle.MOTORCYCLE){
+			return Pair.of(vehicle, (vehicle.getCylinderCapacity()>500?2000:0)+
+					(extraHours*EVehicle.MOTORCYCLE.getPricePerHour())+
+					(numberOfDays*EVehicle.MOTORCYCLE.getPricePerDay()));
 		}
-
-		long numberOfDays=numberOfHours/24;
-		long extraHours=numberOfHours%24;
-		
-		if(extraHours>9){
-			extraHours=0;
-			numberOfDays++;
-		}
-
-		return Pair.of(vehicle, (vehicle.getCylinderCapacity()>500?2000:0)+
-				(extraHours*EVehicle.MOTORCYCLE.getPricePerHour())+
-				(numberOfDays*EVehicle.MOTORCYCLE.getPricePerDay()));
+		return null;
 	}
 
 	private List<IParkingValidation> getCarValidations(Vehicle car){
