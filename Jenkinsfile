@@ -31,16 +31,10 @@ pipeline{
 				 sh 'gradle --b ./build.gradle compileJava' 
 			}
 		}
-		stage('Unit Tests'){
+		stage('Tests'){
 			steps{
 				echo"-------------> These are Unit Test !! <------------"
 				sh 'gradle --b ./build.gradle forceTest' 
-			}
-		}
-		stage('Integration Test'){
-			steps{
-				echo"--------> These are Integration Test !! <----------"
-				echo":Empty test"
 			}
 		}
 		stage('Static Code Analysis'){
@@ -64,15 +58,15 @@ pipeline{
 			echo 'Automatic execution finished'
 		}
 		success {
-			echo 'All was fine, congratulations !!  :)'
+			echo 'All was fine, congratulations !!  :) '
 			mail(to: 'rosemberg.porras@ceiba.com.co',
-            subject: " :) Build successfull Pipeline:${currentBuild.fullDisplayName}",
+            subject: " :) Build successfull Pipeline: ${currentBuild.fullDisplayName}",
             body: "All was done, check details ${env.BUILD_URL}")
 		}
 		failure {
-			echo 'Something was bad :( please check and fix it !! :('
+			echo 'Something was bad :( please check and fix it !! :( '
 			mail(to: 'rosemberg.porras@ceiba.com.co',
-                    subject: " :( Failed Pipeline:${currentBuild.fullDisplayName}",
+                    subject: " :( Failed Pipeline: ${currentBuild.fullDisplayName}",
                     body: "Something is wrong with ${env.BUILD_URL}")
 		}
 		unstable {

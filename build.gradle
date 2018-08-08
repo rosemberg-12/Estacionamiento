@@ -25,7 +25,7 @@ repositories {
 }
 	
 task forceTest { 
-	description 'Force always the tests'
+	description 'Force always the unit tests'
   	dependsOn "cleanTest", "test" 
   	
   	doLast{
