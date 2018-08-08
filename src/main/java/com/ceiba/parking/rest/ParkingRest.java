@@ -26,6 +26,7 @@ import com.ceiba.parking.transport.VehiclesRestResponse;
 public class ParkingRest {
 	
 	private static final Logger LOGGER = Logger.getLogger(ParkingRest.class.getName());
+
 	
 	@Autowired
 	private Facade fachada;
@@ -131,5 +132,6 @@ public class ParkingRest {
 		}
 		return response;
 	}
+
 	
 }
