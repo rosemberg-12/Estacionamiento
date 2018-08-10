@@ -5,6 +5,7 @@ import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.util.Pair;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,6 +32,7 @@ public class ParkingRest {
 	@Autowired
 	private Facade fachada;
 	
+	@CrossOrigin(origins = "http://localhost:3000")
 	@RequestMapping("/allVehicles")
 	public VehiclesRestResponse getAllVehicles(){
 		VehiclesRestResponse response= new VehiclesRestResponse();
@@ -45,6 +47,7 @@ public class ParkingRest {
 		return response;
 	}
 	
+	@CrossOrigin(origins = "http://localhost:3000")
 	@RequestMapping("/allCars")
 	public VehiclesRestResponse getAllCars(){
 		VehiclesRestResponse response= new VehiclesRestResponse();
@@ -59,6 +62,7 @@ public class ParkingRest {
 		return response;
 	}
 	
+	@CrossOrigin(origins = "http://localhost:3000")
 	@RequestMapping("/allMotorcycles")
 	public VehiclesRestResponse getAllMotorcycles(){
 		VehiclesRestResponse response= new VehiclesRestResponse();
@@ -73,6 +77,7 @@ public class ParkingRest {
 		return response;
 	}
 	
+	@CrossOrigin(origins = "http://localhost:3000")
 	@RequestMapping("/carsVacancy")
 	public MessageRestResponse getCarsVacancy(){
 		MessageRestResponse response= new MessageRestResponse();
@@ -87,6 +92,7 @@ public class ParkingRest {
 		return response;
 	}
 	
+	@CrossOrigin(origins = "http://localhost:3000")
 	@RequestMapping("/motorcycleVacancy")
 	public MessageRestResponse getMotorcycleVacancy(){
 		MessageRestResponse response= new MessageRestResponse();
@@ -101,6 +107,7 @@ public class ParkingRest {
 		return response;
 	}
 	
+	@CrossOrigin(origins = "http://localhost:3000")
 	@PostMapping("/registerVehicle")
 	public DefaultRestResponse registerVehicle(@RequestBody Vehicle vehicle){
 		DefaultRestResponse response= new DefaultRestResponse();
@@ -116,6 +123,7 @@ public class ParkingRest {
 		return response;
 	}
 	
+	@CrossOrigin(origins = "http://localhost:3000")
 	@PostMapping("/unregisterVehicle")
 	public UnparkingRestResponse unregisterVehicle(@RequestBody Vehicle vehicle){
 		UnparkingRestResponse response= new UnparkingRestResponse();
