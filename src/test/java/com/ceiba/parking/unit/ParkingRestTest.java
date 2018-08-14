@@ -27,6 +27,9 @@ import com.ceiba.parking.domain.EVehicle;
 import com.ceiba.parking.domain.FilterVehicle;
 import com.ceiba.parking.domain.Vehicle;
 import com.ceiba.parking.facade.Facade;
+import com.ceiba.parking.soap.client.ParkingSoapClient;
+import com.ceiba.parking.wsdl.QueryTCRMResponse;
+import com.ceiba.parking.wsdl.TcrmResponse;
 
 import Builder.MassiveCarBuilder;
 
@@ -44,6 +47,9 @@ public class ParkingRestTest {
 	 
 	 @MockBean
 	    private Facade facade;
+	 
+	 @MockBean
+		private ParkingSoapClient soapClient;
 
 	    @Test
 	    public void allVehiclesRest_Test() throws Exception {
@@ -112,6 +118,16 @@ public class ParkingRestTest {
 	    	.andExpect(jsonPath("$.response",is(true)))
 	    	.andExpect(jsonPath("$.vehicleUnparked.numberPlate",is("AAA432")))
 	    	.andExpect(jsonPath("$.costOfParking",is(500)))
+	    	.andExpect(status().isOk());
+	    }
+	    
+	    @Test
+	    public void getTCRMRest_Test() throws Exception {
+	    	QueryTCRMResponse response= new QueryTCRMResponse();
+	    	response.setReturn(new TcrmResponse());
+	    	when(soapClient.getCurrentTCR()).thenReturn(response);
+	    	this.mockMvc.perform(get("/getTCRM"))
+	    	.andExpect(jsonPath("$.response",is(true)))
 	    	.andExpect(status().isOk());
 	    }
 	

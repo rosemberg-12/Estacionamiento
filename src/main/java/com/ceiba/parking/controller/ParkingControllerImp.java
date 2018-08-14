@@ -15,13 +15,13 @@ import com.ceiba.parking.domain.FilterVehicle;
 import com.ceiba.parking.domain.Vehicle;
 import com.ceiba.parking.entities.DBVehicle;
 import com.ceiba.parking.repository.VehicleRepository;
-import com.ceiba.parking.validation.evaluator.ValidationEvaluator;
 import com.ceiba.parking.validations.ExistVehicleValidation;
 import com.ceiba.parking.validations.IParkingValidation;
 import com.ceiba.parking.validations.MaxCapacityValidation;
 import com.ceiba.parking.validations.NumberPlateValidation;
 import com.ceiba.parking.validations.UniqueVehicleValidation;
 import com.ceiba.parking.validations.VehicleStandarValidation;
+import com.ceiba.parking.validations.evaluator.ValidationEvaluator;
 
 /**
  * Controller of all behaviors of parking.

@@ -14,10 +14,13 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ceiba.parking.domain.FilterVehicle;
 import com.ceiba.parking.domain.Vehicle;
 import com.ceiba.parking.facade.Facade;
+import com.ceiba.parking.soap.client.ParkingSoapClient;
 import com.ceiba.parking.transport.DefaultRestResponse;
 import com.ceiba.parking.transport.MessageRestResponse;
+import com.ceiba.parking.transport.TCRMRestResponse;
 import com.ceiba.parking.transport.UnparkingRestResponse;
 import com.ceiba.parking.transport.VehiclesRestResponse;
+import com.ceiba.parking.wsdl.QueryTCRMResponse;
 /**
  * Rest class 
  * @author rosemberg.porras
@@ -31,6 +34,8 @@ public class ParkingRest {
 	
 	@Autowired
 	private Facade fachada;
+	@Autowired
+	private ParkingSoapClient soapClient;
 	
 	@CrossOrigin(origins = "http://localhost:3000")
 	@RequestMapping("/allVehicles")
@@ -134,6 +139,24 @@ public class ParkingRest {
 			response.setResponse(true);
 		}
 		catch(Exception e){
+			response.setNameException(e.getClass().getSimpleName());
+			response.setMessageException(e.getMessage());
+			LOGGER.log(Level.SEVERE, null, e);
+		}
+		return response;
+	}
+	
+	@CrossOrigin(origins = "http://localhost:3000")
+	@RequestMapping("/getTCRM")
+	public TCRMRestResponse getTCRM(){
+		TCRMRestResponse response= new TCRMRestResponse();
+		try{
+			QueryTCRMResponse current= soapClient.getCurrentTCR();
+			if(current!=null){
+				response.setTcrm(current.getReturn());
+				response.setResponse(true);
+			}
+		}catch(Exception e){
 			response.setNameException(e.getClass().getSimpleName());
 			response.setMessageException(e.getMessage());
 			LOGGER.log(Level.SEVERE, null, e);

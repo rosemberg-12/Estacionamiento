@@ -1,0 +1,71 @@
+<?xml version='1.0' encoding='UTF-8'?><wsdl:definitions name="TCRMServicesWebService" targetNamespace="http://action.trm.services.generic.action.superfinanciera.nexura.sc.com.co/" xmlns:ns1="http://schemas.xmlsoap.org/soap/http" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://action.trm.services.generic.action.superfinanciera.nexura.sc.com.co/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <wsdl:types>
+<xs:schema elementFormDefault="unqualified" targetNamespace="http://action.trm.services.generic.action.superfinanciera.nexura.sc.com.co/" version="1.0" xmlns:tns="http://action.trm.services.generic.action.superfinanciera.nexura.sc.com.co/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+<xs:element name="queryTCRM" type="tns:queryTCRM"/>
+<xs:element name="queryTCRMResponse" type="tns:queryTCRMResponse"/>
+<xs:complexType name="queryTCRM">
+<xs:sequence>
+<xs:element minOccurs="0" name="tcrmQueryAssociatedDate" type="xs:dateTime"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="queryTCRMResponse">
+<xs:sequence>
+<xs:element minOccurs="0" name="return" type="tns:tcrmResponse"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="tcrmResponse">
+<xs:complexContent>
+<xs:extension base="tns:tcrm">
+<xs:sequence>
+<xs:element minOccurs="0" name="message" type="xs:string"/>
+<xs:element minOccurs="0" name="success" type="xs:boolean"/>
+</xs:sequence>
+</xs:extension>
+</xs:complexContent>
+</xs:complexType>
+<xs:complexType name="tcrm">
+<xs:sequence>
+<xs:element minOccurs="0" name="displayToUser" type="xs:boolean"/>
+<xs:element minOccurs="0" name="id" type="xs:long"/>
+<xs:element minOccurs="0" name="unit" type="xs:string"/>
+<xs:element minOccurs="0" name="validityFrom" type="xs:dateTime"/>
+<xs:element minOccurs="0" name="validityTo" type="xs:dateTime"/>
+<xs:element minOccurs="0" name="value" type="xs:float"/>
+</xs:sequence>
+</xs:complexType>
+</xs:schema>
+  </wsdl:types>
+  <wsdl:message name="queryTCRM">
+    <wsdl:part element="tns:queryTCRM" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="queryTCRMResponse">
+    <wsdl:part element="tns:queryTCRMResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="TCRMServicesInterface">
+    <wsdl:operation name="queryTCRM">
+      <wsdl:input message="tns:queryTCRM" name="queryTCRM">
+    </wsdl:input>
+      <wsdl:output message="tns:queryTCRMResponse" name="queryTCRMResponse">
+    </wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="TCRMServicesWebServiceSoapBinding" type="tns:TCRMServicesInterface">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="queryTCRM">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="queryTCRM">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="queryTCRMResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="TCRMServicesWebService">
+    <wsdl:port binding="tns:TCRMServicesWebServiceSoapBinding" name="TCRMServicesWebServicePort">
+      <soap:address location="http://superfinanciera.gov.co:8080/SuperfinancieraWebServiceTRM/TCRMServicesWebService/TCRMServicesWebService"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
