@@ -10,8 +10,6 @@ public class ParkingSoapClientConfiguration {
 	@Bean
 	public Jaxb2Marshaller marshaller() {
 		Jaxb2Marshaller marshaller = new Jaxb2Marshaller();
-		// this package must match the package in the <generatePackage> specified in
-		// pom.xml
 		marshaller.setContextPath("com.ceiba.parking.wsdl");
 		return marshaller;
 	}
