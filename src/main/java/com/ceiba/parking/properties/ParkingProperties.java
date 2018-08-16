@@ -4,7 +4,7 @@ import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
 
 /**
- * Properties implementation with purpose to manage the String used in the aplication and 
+ * Properties implementation with purpose to manage the String used in the application.
  * @author rosemberg.porras
  *
  */

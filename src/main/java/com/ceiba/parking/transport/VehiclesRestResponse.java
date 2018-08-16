@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.ceiba.parking.domain.Vehicle;
 
-public class VehiclesRestResponse extends DefaultRestResponse {
+public class VehiclesRestResponse  {
 
 	private List<Vehicle> listOfVehicles;
 	

@@ -1,4 +1,4 @@
-package com.ceiba.parking.controller;
+package com.ceiba.parking.services;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -24,17 +24,17 @@ import com.ceiba.parking.validations.VehicleStandarValidation;
 import com.ceiba.parking.validations.evaluator.ValidationEvaluator;
 
 /**
- * Controller of all behaviors of parking.
+ * Service of all behaviors of parking.
  * 
  * @author rosemberg.porras
  *
  */
 @Service
-public class ParkingControllerImp implements IParkingController {
+public class ParkingServiceImp implements IParkingService {
 
 	@Autowired
 	VehicleRepository repository;
-
+	
 	/**
 	 * Get all the vehicles given a filter criteria.
 	 * 
@@ -185,6 +185,16 @@ public class ParkingControllerImp implements IParkingController {
 		validations.add(new VehicleStandarValidation(vehicle));
 		validations.add(new UniqueVehicleValidation(repository, vehicle));
 		return validations;
+	}
+
+	@Override
+	public int getVacancyCars() {
+		return EVehicle.CAR.getMaxCapacity()-getQuantityOfCars();
+	}
+
+	@Override
+	public int getVacancyMotorcycles() {
+		return EVehicle.MOTORCYCLE.getMaxCapacity()-getQuantityOfMotorcycles();
 	}
 
 }

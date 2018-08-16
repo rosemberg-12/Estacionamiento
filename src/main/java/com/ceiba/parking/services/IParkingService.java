@@ -1,4 +1,4 @@
-package com.ceiba.parking.controller;
+package com.ceiba.parking.services;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -8,7 +8,7 @@ import org.springframework.data.util.Pair;
 import com.ceiba.parking.domain.FilterVehicle;
 import com.ceiba.parking.domain.Vehicle;
 
-public interface IParkingController {
+public interface IParkingService {
 
 	public List<Vehicle> getAllVehicle(FilterVehicle filter);
 	public void registerVehicle(Vehicle vehicle);
@@ -16,5 +16,7 @@ public interface IParkingController {
 	public int getQuantityOfCars();
 	public int getQuantityOfMotorcycles();
 	public LocalDateTime today();
+	public int getVacancyCars();
+	public int getVacancyMotorcycles();
 	
 }

@@ -2,7 +2,7 @@ package com.ceiba.parking.transport;
 
 import com.ceiba.parking.wsdl.TcrmResponse;
 
-public class TCRMRestResponse extends DefaultRestResponse {
+public class TCRMRestResponse {
 
 	private TcrmResponse tcrm;
 	

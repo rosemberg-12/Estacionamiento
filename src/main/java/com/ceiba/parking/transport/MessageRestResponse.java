@@ -1,6 +1,6 @@
 package com.ceiba.parking.transport;
 
-public class MessageRestResponse extends DefaultRestResponse {
+public class MessageRestResponse {
 
 	private String message;
 	

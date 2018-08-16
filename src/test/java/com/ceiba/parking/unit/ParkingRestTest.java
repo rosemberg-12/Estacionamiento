@@ -26,7 +26,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.ceiba.parking.domain.EVehicle;
 import com.ceiba.parking.domain.FilterVehicle;
 import com.ceiba.parking.domain.Vehicle;
-import com.ceiba.parking.facade.Facade;
+import com.ceiba.parking.services.IParkingService;
 import com.ceiba.parking.soap.client.ParkingSoapClient;
 import com.ceiba.parking.wsdl.QueryTCRMResponse;
 import com.ceiba.parking.wsdl.TcrmResponse;
@@ -46,7 +46,7 @@ public class ParkingRestTest {
 	    private MockMvc mockMvc;
 	 
 	 @MockBean
-	    private Facade facade;
+		private IParkingService controller;
 	 
 	 @MockBean
 		private ParkingSoapClient soapClient;
@@ -55,7 +55,7 @@ public class ParkingRestTest {
 	    public void allVehiclesRest_Test() throws Exception {
 	    	List<Vehicle> vehicles=MassiveCarBuilder.generateMultipleVehicles(3, EVehicle.CAR);
 	    	vehicles.addAll(MassiveCarBuilder.generateMultipleVehicles(3, EVehicle.MOTORCYCLE));
-	    	when(facade.getVehicles(FilterVehicle.SEARCH_ALL)).thenReturn(vehicles);
+	    	when(controller.getAllVehicle(FilterVehicle.SEARCH_ALL)).thenReturn(vehicles);
 	    	this.mockMvc.perform(get("/allVehicles"))
 	    	.andExpect(jsonPath("$.listOfVehicles",hasSize(6)))
 	    	.andExpect(status().isOk());
@@ -64,7 +64,7 @@ public class ParkingRestTest {
 	    @Test
 	    public void allCarsRest_Test() throws Exception {
 	    	List<Vehicle> vehicles=MassiveCarBuilder.generateMultipleVehicles(3, EVehicle.CAR);
-	    	when(facade.getVehicles(FilterVehicle.SEARCH_CAR)).thenReturn(vehicles);
+	    	when(controller.getAllVehicle(FilterVehicle.SEARCH_CAR)).thenReturn(vehicles);
 	    	this.mockMvc.perform(get("/allCars"))
 	    	.andExpect(jsonPath("$.listOfVehicles",hasSize(3)))
 	    	.andExpect(status().isOk());
@@ -73,7 +73,7 @@ public class ParkingRestTest {
 	    @Test
 	    public void allMotorcycles_Test() throws Exception {
 	    	List<Vehicle> vehicles=MassiveCarBuilder.generateMultipleVehicles(3, EVehicle.MOTORCYCLE);
-	    	when(facade.getVehicles(FilterVehicle.SEARCH_MOTORCYCLE)).thenReturn(vehicles);
+	    	when(controller.getAllVehicle(FilterVehicle.SEARCH_MOTORCYCLE)).thenReturn(vehicles);
 	    	this.mockMvc.perform(get("/allMotorcycles"))
 	    	.andExpect(jsonPath("$.listOfVehicles",hasSize(3)))
 	    	.andExpect(status().isOk());
@@ -81,29 +81,26 @@ public class ParkingRestTest {
 	    
 	    @Test
 	    public void carsVacancy_Test() throws Exception {
-	    	when(facade.getCarVacancy()).thenReturn(5);
+	    	when(controller.getVacancyCars()).thenReturn(5);
 	    	this.mockMvc.perform(get("/carsVacancy"))
 	    	.andExpect(jsonPath("$.message",is("5")))
-	    	.andExpect(jsonPath("$.response",is(true)))
 	    	.andExpect(status().isOk());
 	    }
 	    
 	    @Test
 	    public void motorcycleVacancy_Test() throws Exception {
-	    	when(facade.getMotorcycleVacancy()).thenReturn(5);
+	    	when(controller.getVacancyMotorcycles()).thenReturn(5);
 	    	this.mockMvc.perform(get("/motorcycleVacancy"))
 	    	.andExpect(jsonPath("$.message",is("5")))
-	    	.andExpect(jsonPath("$.response",is(true)))
 	    	.andExpect(status().isOk());
 	    }
 	    
 	    @Test
 	    public void registerVehicle_Test() throws Exception {
-	    	doNothing().when(facade).registerVehicle(Mockito.any(Vehicle.class));
+	    	doNothing().when(controller).registerVehicle(Mockito.any(Vehicle.class));
 	    	this.mockMvc.perform(post("/registerVehicle")
 	    	    	.contentType(MediaType.APPLICATION_JSON)
 	                .content(JSON_CAR))
-	    	.andExpect(jsonPath("$.response",is(true)))
 	    	.andExpect(status().isOk());
 	    }
 	    
@@ -111,11 +108,10 @@ public class ParkingRestTest {
 	    public void unregisterVehicle_Test() throws Exception {
 	    	Vehicle vehicle=new Vehicle(1L, "AAA432", EVehicle.CAR, null, null);
 	    	Pair<Vehicle, Long> pairToReturn=Pair.of(vehicle, 500L);
-	    	when(facade.unParkingVehicle(Mockito.any(Vehicle.class))).thenReturn(pairToReturn);
+	    	when(controller.unRegisterVehicle(Mockito.any(Vehicle.class))).thenReturn(pairToReturn);
 	    	this.mockMvc.perform(post("/unregisterVehicle")
 	    	    	.contentType(MediaType.APPLICATION_JSON)
 	                .content(JSON_CAR))
-	    	.andExpect(jsonPath("$.response",is(true)))
 	    	.andExpect(jsonPath("$.vehicleUnparked.numberPlate",is("AAA432")))
 	    	.andExpect(jsonPath("$.costOfParking",is(500)))
 	    	.andExpect(status().isOk());
@@ -127,7 +123,6 @@ public class ParkingRestTest {
 	    	response.setReturn(new TcrmResponse());
 	    	when(soapClient.getCurrentTCR()).thenReturn(response);
 	    	this.mockMvc.perform(get("/getTCRM"))
-	    	.andExpect(jsonPath("$.response",is(true)))
 	    	.andExpect(status().isOk());
 	    }
 	

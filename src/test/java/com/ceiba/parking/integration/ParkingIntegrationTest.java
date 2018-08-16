@@ -17,15 +17,14 @@ import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.data.util.Pair;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import com.ceiba.parking.controller.IParkingController;
 import com.ceiba.parking.domain.EVehicle;
 import com.ceiba.parking.domain.FilterVehicle;
 import com.ceiba.parking.domain.Vehicle;
 import com.ceiba.parking.entities.DBVehicle;
 import com.ceiba.parking.exceptions.ParkingException;
-import com.ceiba.parking.facade.Facade;
 import com.ceiba.parking.properties.ParkingProperties;
 import com.ceiba.parking.repository.VehicleRepository;
+import com.ceiba.parking.services.IParkingService;
 
 import Builder.MassiveCarBuilder;
 import Builder.VehicleBuilder;
@@ -37,14 +36,11 @@ public class ParkingIntegrationTest {
 	
 	private LocalDateTime now=LocalDateTime.of(2018,8,1,7,0);
 	
-	@Autowired
-	private Facade fachada;
-	
     @Autowired
     private VehicleRepository repository;
     
     @SpyBean
-    private IParkingController controllerImp;
+    private IParkingService controllerImp;
     
     @Before
     public void initializeDate(){
@@ -66,7 +62,7 @@ public class ParkingIntegrationTest {
 			repository.save(vehicle);
 		}
 		
-		List<Vehicle>allVehicles=fachada.getVehicles(FilterVehicle.SEARCH_ALL);
+		List<Vehicle>allVehicles=controllerImp.getAllVehicle(FilterVehicle.SEARCH_ALL);
 		
 		Assert.assertTrue("All vehicles obtained",allVehicles.size()==10);
 	}
@@ -81,7 +77,7 @@ public class ParkingIntegrationTest {
 			repository.save(vehicle);
 		}
 		
-		List<Vehicle>allVehicles=fachada.getVehicles(FilterVehicle.SEARCH_CAR);
+		List<Vehicle>allVehicles=controllerImp.getAllVehicle(FilterVehicle.SEARCH_CAR);
 		
 		Assert.assertTrue("All cars obtained",allVehicles.size()==6);
 	}
@@ -96,7 +92,7 @@ public class ParkingIntegrationTest {
 			repository.save(vehicle);
 		}
 		
-		List<Vehicle>allVehicles=fachada.getVehicles(FilterVehicle.SEARCH_MOTORCYCLE);
+		List<Vehicle>allVehicles=controllerImp.getAllVehicle(FilterVehicle.SEARCH_MOTORCYCLE);
 		
 		Assert.assertTrue("All Motorcycles obtained",allVehicles.size()==4);
 	}
@@ -107,7 +103,7 @@ public class ParkingIntegrationTest {
 		
 		Vehicle vehicle=new VehicleBuilder().withNumberPlate("CCC000").withKindOfVehicle(EVehicle.CAR).build();
 		
-		fachada.registerVehicle(vehicle);
+		controllerImp.registerVehicle(vehicle);
 		
 		List<DBVehicle> dbVehicle=repository.findByNumberPlate("CCC000");
 		
@@ -123,10 +119,10 @@ public class ParkingIntegrationTest {
 		
 		Vehicle vehicle=new VehicleBuilder().withNumberPlate("CCC000").withKindOfVehicle(EVehicle.CAR).build();
 		
-		fachada.registerVehicle(vehicle);
+		controllerImp.registerVehicle(vehicle);
 		
 		try{
-			fachada.registerVehicle(vehicle);
+			controllerImp.registerVehicle(vehicle);
 			fail("Car repeated allowed, error");
 		}catch(ParkingException ex){
 			Assert.assertTrue("Car repeated, not inserted",ex.getMessage().equals(ParkingProperties.getValue("ERROR_ALREADY_PARKED")));
@@ -146,7 +142,7 @@ public class ParkingIntegrationTest {
 		Vehicle vehicle=new VehicleBuilder().withNumberPlate("CCC000").withKindOfVehicle(EVehicle.CAR).build();
 		
 		try{
-			fachada.registerVehicle(vehicle);
+			controllerImp.registerVehicle(vehicle);
 			fail("Limit exceded and inserted !!");
 		}catch(ParkingException ex){
 			Assert.assertTrue("Limit exceded, not inserted",ex.getMessage().equals(ParkingProperties.getValue("ERROR_NO_VACANCY_CARS")));
@@ -159,7 +155,7 @@ public class ParkingIntegrationTest {
 		Vehicle vehicle=new VehicleBuilder().withNumberPlate("").withKindOfVehicle(EVehicle.CAR).build();
 		
 		try{
-			fachada.registerVehicle(vehicle);
+			controllerImp.registerVehicle(vehicle);
 			fail("Car allowed with number plate empty, error");
 		}catch(ParkingException ex){
 			Assert.assertTrue("Car with number plate empty, not registered",
@@ -176,7 +172,7 @@ public class ParkingIntegrationTest {
 		Vehicle vehicle=new VehicleBuilder().withNumberPlate(ParkingProperties.getValue("SPECIAL_LETTER_PLATE")+"CC000").withKindOfVehicle(EVehicle.CAR).build();
 		when(controllerImp.today()).thenReturn(this.now.plusDays(4));
 		try{
-			fachada.registerVehicle(vehicle);
+			controllerImp.registerVehicle(vehicle);
 			fail("Car With invalid start letter, error");
 		}catch(ParkingException ex){
 			Assert.assertTrue("Car With invalid start letter, not inserted",ex.getMessage().equals(ParkingProperties.getValue("ERROR_VALIDATION_PLATE")));
@@ -192,7 +188,7 @@ public class ParkingIntegrationTest {
 		Vehicle vehicle=new VehicleBuilder().withNumberPlate(ParkingProperties.getValue("SPECIAL_LETTER_PLATE")+"CC000").withKindOfVehicle(EVehicle.CAR).build();
 		when(controllerImp.today()).thenReturn(this.now.plusDays(5));
 		try{
-			fachada.registerVehicle(vehicle);
+			controllerImp.registerVehicle(vehicle);
 			fail("Car With invalid start letter, error");
 		}catch(ParkingException ex){
 			Assert.assertTrue("Car With invalid start letter, not inserted",ex.getMessage().equals(ParkingProperties.getValue("ERROR_VALIDATION_PLATE")));
@@ -204,7 +200,7 @@ public class ParkingIntegrationTest {
 		
 		Vehicle vehicle=new VehicleBuilder().withNumberPlate("MMM000").withKindOfVehicle(EVehicle.MOTORCYCLE).withCylinderCapacity(500).build();
 		
-		fachada.registerVehicle(vehicle);
+		controllerImp.registerVehicle(vehicle);
 		
 		List<DBVehicle> dbVehicle=repository.findByNumberPlate("MMM000");
 		
@@ -220,10 +216,10 @@ public class ParkingIntegrationTest {
 
 		Vehicle vehicle=new VehicleBuilder().withNumberPlate("MMM000").withKindOfVehicle(EVehicle.MOTORCYCLE).withCylinderCapacity(500).build();
 		
-		fachada.registerVehicle(vehicle);
+		controllerImp.registerVehicle(vehicle);
 		
 		try{
-			fachada.registerVehicle(vehicle);
+			controllerImp.registerVehicle(vehicle);
 			fail("Motorcycle repeated allowed, error");
 		}catch(ParkingException ex){
 			Assert.assertTrue("Motorcycle repeated, not inserted",ex.getMessage().equals(ParkingProperties.getValue("ERROR_ALREADY_PARKED")));
@@ -243,7 +239,7 @@ public class ParkingIntegrationTest {
 		Vehicle vehicle=new VehicleBuilder().withNumberPlate("MMM000").withKindOfVehicle(EVehicle.MOTORCYCLE).withCylinderCapacity(500).build();
 		
 		try{
-			fachada.registerVehicle(vehicle);
+			controllerImp.registerVehicle(vehicle);
 			fail("Limit exceded and inserted !!");
 		}catch(ParkingException ex){
 			Assert.assertTrue("Limit exceded, not inserted",ex.getMessage().equals(ParkingProperties.getValue("ERROR_NO_VACANCY_MOTORCYCLE")));
@@ -255,7 +251,7 @@ public class ParkingIntegrationTest {
 		
 		Vehicle vehicle=new VehicleBuilder().withNumberPlate("").withKindOfVehicle(EVehicle.MOTORCYCLE).withCylinderCapacity(500).build();
 		try{
-			fachada.registerVehicle(vehicle);
+			controllerImp.registerVehicle(vehicle);
 			fail("Motorcycle allowed with number plate empty, error");
 		}catch(ParkingException ex){
 			Assert.assertTrue("Motorcycle with number plate empty, not registered",
@@ -268,7 +264,7 @@ public class ParkingIntegrationTest {
 		
 		Vehicle vehicle=new VehicleBuilder().withNumberPlate("MMM000").withKindOfVehicle(EVehicle.MOTORCYCLE).build();
 		try{
-			fachada.registerVehicle(vehicle);
+			controllerImp.registerVehicle(vehicle);
 			fail("Motorcycle allowed without Cylinder capacity, error");
 		}catch(ParkingException ex){
 			Assert.assertTrue("Motorcycle without Cylinder capacity, not registered",
@@ -286,7 +282,7 @@ public class ParkingIntegrationTest {
 		Vehicle vehicle=new VehicleBuilder().withNumberPlate(ParkingProperties.getValue("SPECIAL_LETTER_PLATE")+"MM000").withKindOfVehicle(EVehicle.MOTORCYCLE).withCylinderCapacity(500).build();
 		when(controllerImp.today()).thenReturn(this.now.plusDays(4));
 		try{
-			fachada.registerVehicle(vehicle);
+			controllerImp.registerVehicle(vehicle);
 			fail("Motorcycle With invalid start letter, error");
 		}catch(ParkingException ex){
 			Assert.assertTrue("Motorcycle With invalid start letter, not inserted",ex.getMessage().equals(ParkingProperties.getValue("ERROR_VALIDATION_PLATE")));
@@ -302,7 +298,7 @@ public class ParkingIntegrationTest {
 		Vehicle vehicle=new VehicleBuilder().withNumberPlate(ParkingProperties.getValue("SPECIAL_LETTER_PLATE")+"MM000").withKindOfVehicle(EVehicle.MOTORCYCLE).withCylinderCapacity(500).build();
 		when(controllerImp.today()).thenReturn(this.now.plusDays(5));
 		try{
-			fachada.registerVehicle(vehicle);
+			controllerImp.registerVehicle(vehicle);
 			fail("Motorcycle With invalid start letter, error");
 		}catch(ParkingException ex){
 			Assert.assertTrue("Motorcycle With invalid start letter, not inserted",ex.getMessage().equals(ParkingProperties.getValue("ERROR_VALIDATION_PLATE")));
@@ -320,7 +316,7 @@ public class ParkingIntegrationTest {
 			repository.save(vehicle);
 		}
 		
-		Integer vacancy=fachada.getCarVacancy();
+		Integer vacancy=controllerImp.getVacancyCars();
 		
 		Assert.assertTrue("True vacancy for cars",(Integer.parseInt(ParkingProperties.getValue("MAX_CARS"))-6)==vacancy);
 	}
@@ -335,7 +331,7 @@ public class ParkingIntegrationTest {
 			repository.save(vehicle);
 		}
 		
-		Integer vacancy=fachada.getMotorcycleVacancy();
+		Integer vacancy=controllerImp.getVacancyMotorcycles();
 		
 		Assert.assertTrue("True vacancy for Motorcycles",(Integer.parseInt(ParkingProperties.getValue("MAX_MOTORCYCLES"))-4)==vacancy);
 	}
@@ -345,9 +341,9 @@ public class ParkingIntegrationTest {
 		
 		Vehicle vehicle=new VehicleBuilder().withNumberPlate("CCC000").withKindOfVehicle(EVehicle.CAR).build();
 		when(controllerImp.today()).thenReturn(now);
-		fachada.registerVehicle(vehicle);
+		controllerImp.registerVehicle(vehicle);
 		when(controllerImp.today()).thenReturn(now.plusMinutes(50));
-		Pair<Vehicle,Long> output=fachada.unParkingVehicle(vehicle);
+		Pair<Vehicle,Long> output=controllerImp.unRegisterVehicle(vehicle);
 		Assert.assertTrue("Price according per 1 hour",output.getSecond().equals(1000L));
 	}
 	
@@ -356,9 +352,9 @@ public class ParkingIntegrationTest {
 		
 		Vehicle vehicle=new VehicleBuilder().withNumberPlate("CCC000").withKindOfVehicle(EVehicle.CAR).build();
 		when(controllerImp.today()).thenReturn(now);
-		fachada.registerVehicle(vehicle);
+		controllerImp.registerVehicle(vehicle);
 		when(controllerImp.today()).thenReturn(now.plusDays(1));
-		Pair<Vehicle,Long> output=fachada.unParkingVehicle(vehicle);
+		Pair<Vehicle,Long> output=controllerImp.unRegisterVehicle(vehicle);
 		Assert.assertTrue("Price according per 1 Day",output.getSecond().equals(8000L));
 	}
 	
@@ -367,9 +363,9 @@ public class ParkingIntegrationTest {
 		
 		Vehicle vehicle=new VehicleBuilder().withNumberPlate("CCC000").withKindOfVehicle(EVehicle.CAR).build();
 		when(controllerImp.today()).thenReturn(now);
-		fachada.registerVehicle(vehicle);
+		controllerImp.registerVehicle(vehicle);
 		when(controllerImp.today()).thenReturn(now.plusHours(11));
-		Pair<Vehicle,Long> output=fachada.unParkingVehicle(vehicle);
+		Pair<Vehicle,Long> output=controllerImp.unRegisterVehicle(vehicle);
 		Assert.assertTrue("Price according per 1 Day",output.getSecond().equals(8000L));
 	}
 	
@@ -379,11 +375,11 @@ public class ParkingIntegrationTest {
 		
 		Vehicle vehicle=new VehicleBuilder().withNumberPlate("CCC000").withKindOfVehicle(EVehicle.CAR).build();
 		when(controllerImp.today()).thenReturn(now);
-		fachada.registerVehicle(vehicle);
+		controllerImp.registerVehicle(vehicle);
 		when(controllerImp.today()).thenReturn(now.plusMinutes(50));
 		vehicle.setNumberPlate("XXX000");
 		try{
-			fachada.unParkingVehicle(vehicle);
+			controllerImp.unRegisterVehicle(vehicle);
 			fail("Car doesn't exist, error");
 		}catch(ParkingException ex){
 			Assert.assertTrue("Car doesn't exist, nothing happen",ex.getMessage().equals(ParkingProperties.getValue("ERROR_DOESNT_EXIST")));
@@ -395,9 +391,9 @@ public class ParkingIntegrationTest {
 		
 		Vehicle vehicle=new VehicleBuilder().withNumberPlate("MMM000").withKindOfVehicle(EVehicle.MOTORCYCLE).withCylinderCapacity(400).build();
 		when(controllerImp.today()).thenReturn(now);
-		fachada.registerVehicle(vehicle);
+		controllerImp.registerVehicle(vehicle);
 		when(controllerImp.today()).thenReturn(now.plusMinutes(50));
-		Pair<Vehicle,Long> output=fachada.unParkingVehicle(vehicle);
+		Pair<Vehicle,Long> output=controllerImp.unRegisterVehicle(vehicle);
 		Assert.assertTrue("Price according per 1 hour short CC",output.getSecond().equals(500L));
 	}
 	
@@ -406,9 +402,9 @@ public class ParkingIntegrationTest {
 		
 		Vehicle vehicle=new VehicleBuilder().withNumberPlate("MMM000").withKindOfVehicle(EVehicle.MOTORCYCLE).withCylinderCapacity(600).build();
 		when(controllerImp.today()).thenReturn(now);
-		fachada.registerVehicle(vehicle);
+		controllerImp.registerVehicle(vehicle);
 		when(controllerImp.today()).thenReturn(now.plusMinutes(50));
-		Pair<Vehicle,Long> output=fachada.unParkingVehicle(vehicle);
+		Pair<Vehicle,Long> output=controllerImp.unRegisterVehicle(vehicle);
 		Assert.assertTrue("Price according per 1 hour and big CC",output.getSecond().equals(2500L));
 	}
 	
@@ -417,9 +413,9 @@ public class ParkingIntegrationTest {
 		
 		Vehicle vehicle=new VehicleBuilder().withNumberPlate("MMM000").withKindOfVehicle(EVehicle.MOTORCYCLE).withCylinderCapacity(400).build();
 		when(controllerImp.today()).thenReturn(now);
-		fachada.registerVehicle(vehicle);
+		controllerImp.registerVehicle(vehicle);
 		when(controllerImp.today()).thenReturn(now.plusDays(1));
-		Pair<Vehicle,Long> output=fachada.unParkingVehicle(vehicle);
+		Pair<Vehicle,Long> output=controllerImp.unRegisterVehicle(vehicle);
 		Assert.assertTrue("Price according per 1 Day",output.getSecond().equals(4000L));
 	}
 	
@@ -428,9 +424,9 @@ public class ParkingIntegrationTest {
 		
 		Vehicle vehicle=new VehicleBuilder().withNumberPlate("MMM000").withKindOfVehicle(EVehicle.MOTORCYCLE).withCylinderCapacity(600).build();
 		when(controllerImp.today()).thenReturn(now);
-		fachada.registerVehicle(vehicle);
+		controllerImp.registerVehicle(vehicle);
 		when(controllerImp.today()).thenReturn(now.plusDays(1));
-		Pair<Vehicle,Long> output=fachada.unParkingVehicle(vehicle);
+		Pair<Vehicle,Long> output=controllerImp.unRegisterVehicle(vehicle);
 		Assert.assertTrue("Price according per 1 Day",output.getSecond().equals(6000L));
 	}
 	
@@ -439,9 +435,9 @@ public class ParkingIntegrationTest {
 		
 		Vehicle vehicle=new VehicleBuilder().withNumberPlate("MMM000").withKindOfVehicle(EVehicle.MOTORCYCLE).withCylinderCapacity(400).build();
 		when(controllerImp.today()).thenReturn(now);
-		fachada.registerVehicle(vehicle);
+		controllerImp.registerVehicle(vehicle);
 		when(controllerImp.today()).thenReturn(now.plusHours(11));
-		Pair<Vehicle,Long> output=fachada.unParkingVehicle(vehicle);
+		Pair<Vehicle,Long> output=controllerImp.unRegisterVehicle(vehicle);
 		Assert.assertTrue("Price according per 1 Day",output.getSecond().equals(4000L));
 	}
 	
@@ -450,9 +446,9 @@ public class ParkingIntegrationTest {
 		
 		Vehicle vehicle=new VehicleBuilder().withNumberPlate("MMM000").withKindOfVehicle(EVehicle.MOTORCYCLE).withCylinderCapacity(600).build();
 		when(controllerImp.today()).thenReturn(now);
-		fachada.registerVehicle(vehicle);
+		controllerImp.registerVehicle(vehicle);
 		when(controllerImp.today()).thenReturn(now.plusHours(11));
-		Pair<Vehicle,Long> output=fachada.unParkingVehicle(vehicle);
+		Pair<Vehicle,Long> output=controllerImp.unRegisterVehicle(vehicle);
 		Assert.assertTrue("Price according per 1 Day",output.getSecond().equals(6000L));
 	}
 	
@@ -461,11 +457,11 @@ public class ParkingIntegrationTest {
 		
 		Vehicle vehicle=new VehicleBuilder().withNumberPlate("MMM000").withKindOfVehicle(EVehicle.MOTORCYCLE).withCylinderCapacity(400).build();
 		when(controllerImp.today()).thenReturn(now);
-		fachada.registerVehicle(vehicle);
+		controllerImp.registerVehicle(vehicle);
 		when(controllerImp.today()).thenReturn(now.plusMinutes(50));
 		vehicle.setNumberPlate("XXX000");
 		try{
-			fachada.unParkingVehicle(vehicle);
+			controllerImp.unRegisterVehicle(vehicle);
 			fail("Motorcycle doesn't exist, error");
 		}catch(ParkingException ex){
 			Assert.assertTrue("Motorcycle doesn't exist, nothing happen",ex.getMessage().equals(ParkingProperties.getValue("ERROR_DOESNT_EXIST")));

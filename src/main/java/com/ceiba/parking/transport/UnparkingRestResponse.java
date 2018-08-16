@@ -2,7 +2,7 @@ package com.ceiba.parking.transport;
 
 import com.ceiba.parking.domain.Vehicle;
 
-public class UnparkingRestResponse extends DefaultRestResponse {
+public class UnparkingRestResponse{
 	private Vehicle vehicleUnparked;
 	private Long costOfParking;
 	
