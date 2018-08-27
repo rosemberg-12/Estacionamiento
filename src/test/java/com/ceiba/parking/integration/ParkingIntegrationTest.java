@@ -206,7 +206,7 @@ public class ParkingIntegrationTest {
 		
 		Assert.assertTrue(dbVehicle!=null);
 		Assert.assertTrue(dbVehicle.size()>0);
-		Assert.assertTrue("MMM000".equals(dbVehicle.get(0).getNumberPlate()));
+		Assert.assertEquals("MMM000", (dbVehicle.get(0).getNumberPlate()));
 		Assert.assertTrue("Motorcycle register",EVehicle.MOTORCYCLE==dbVehicle.get(0).getKindOfVehicle());
 
 	}

@@ -165,7 +165,7 @@ public class ParkingServiceImp implements IParkingService {
 		}
 		return null;
 	}
-
+	
 	private List<IParkingValidation> getCarValidations(Vehicle car) {
 		List<IParkingValidation> validations = new ArrayList<>();
 		validations.add(new MaxCapacityValidation(getAllVehicle(FilterVehicle.SEARCH_CAR), EVehicle.CAR));
