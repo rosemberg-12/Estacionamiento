@@ -6,6 +6,7 @@ import static org.mockito.Mockito.when;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.ceiba.parking.transport.VehicleDTO;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -466,6 +467,23 @@ public class ParkingIntegrationTest {
 		}catch(ParkingException ex){
 			Assert.assertTrue("Motorcycle doesn't exist, nothing happen",ex.getMessage().equals(ParkingProperties.getValue("ERROR_DOESNT_EXIST")));
 		}
+	}
+
+	@Test
+	public void customQueryTest(){
+
+		List<DBVehicle>vehicles=MassiveCarBuilder.generateMultipleVehiclesDB(5, EVehicle.CAR);
+		vehicles.addAll(MassiveCarBuilder.generateMultipleVehiclesDB(5, EVehicle.MOTORCYCLE));
+
+		for(DBVehicle vehicle: vehicles){
+			repository.save(vehicle);
+		}
+
+		List<VehicleDTO>allVehicles=repository.findAllvehicles();
+
+		allVehicles.forEach(System.out::println);
+
+		Assert.assertTrue("All vehicles obtained",true);
 	}
 
 }

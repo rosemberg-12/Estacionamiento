@@ -65,4 +65,8 @@ public class DBVehicle {
 		this.cylinderCapacity = cylinderCapacity;
 	}
 
+	@Override
+	public String toString() {
+		return this.numberPlate+" / "+kindOfVehicle.name();
+	}
 }
